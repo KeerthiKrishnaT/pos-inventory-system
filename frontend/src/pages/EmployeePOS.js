@@ -1,0 +1,335 @@
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '../context/AuthContext';
+import axios from 'axios';
+import '../App.css';
+
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+
+const EmployeePOS = () => {
+  const { user, logout } = useAuth();
+  const [products, setProducts] = useState([]);
+  const [cart, setCart] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState({ type: '', text: '' });
+  const [lastSale, setLastSale] = useState(null);
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/sales/pos/products`);
+      setProducts(response.data);
+    } catch (error) {
+      setMessage({ type: 'error', text: 'Failed to load products' });
+    }
+  };
+
+  const filteredProducts = products.filter(product =>
+    product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    product.sku.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const addToCart = (product) => {
+    const existingItem = cart.find(item => item.productId === product._id);
+    
+    if (existingItem) {
+      if (existingItem.quantity >= product.stock) {
+        setMessage({ type: 'error', text: `Only ${product.stock} units available` });
+        return;
+      }
+      setCart(cart.map(item =>
+        item.productId === product._id
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
+      ));
+    } else {
+      if (product.stock === 0) {
+        setMessage({ type: 'error', text: 'Product out of stock' });
+        return;
+      }
+      setCart([...cart, {
+        productId: product._id,
+        productName: product.name,
+        price: product.price,
+        quantity: 1,
+        stock: product.stock
+      }]);
+    }
+    setMessage({ type: 'success', text: 'Item added to cart' });
+    setTimeout(() => setMessage({ type: '', text: '' }), 2000);
+  };
+
+  const updateQuantity = (productId, newQuantity) => {
+    const cartItem = cart.find(item => item.productId === productId);
+    if (newQuantity > cartItem.stock) {
+      setMessage({ type: 'error', text: `Only ${cartItem.stock} units available` });
+      return;
+    }
+    if (newQuantity <= 0) {
+      removeFromCart(productId);
+      return;
+    }
+    setCart(cart.map(item =>
+      item.productId === productId
+        ? { ...item, quantity: newQuantity }
+        : item
+    ));
+  };
+
+  const removeFromCart = (productId) => {
+    setCart(cart.filter(item => item.productId !== productId));
+  };
+
+  const calculateTotal = () => {
+    return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+  };
+
+  const handleCheckout = async () => {
+    if (cart.length === 0) {
+      setMessage({ type: 'error', text: 'Cart is empty' });
+      return;
+    }
+
+    setLoading(true);
+    setMessage({ type: '', text: '' });
+
+    try {
+      const items = cart.map(item => ({
+        productId: item.productId,
+        quantity: item.quantity
+      }));
+
+      const response = await axios.post(`${API_URL}/sales`, { items });
+      const saleData = response.data;
+      
+      // Store last sale for receipt display
+      setLastSale({
+        date: new Date(saleData.createdAt).toLocaleString(),
+        items: saleData.items,
+        totalAmount: saleData.totalAmount,
+        soldBy: saleData.soldByName || user?.email
+      });
+      
+      setMessage({ type: 'success', text: 'Sale completed successfully!' });
+      setCart([]);
+      fetchProducts(); // Refresh product list to update stock
+      
+      setTimeout(() => {
+        setMessage({ type: '', text: '' });
+      }, 3000);
+    } catch (error) {
+      setMessage({
+        type: 'error',
+        text: error.response?.data?.message || 'Failed to complete sale'
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleLogout = () => {
+    logout();
+    window.location.href = '/login';
+  };
+
+  return (
+    <div className="app">
+      <nav className="navbar">
+        <h1>POS Counter</h1>
+        <div className="navbar-actions">
+          <span>Welcome, {user?.email}</span>
+          <button className="btn btn-secondary" onClick={handleLogout}>
+            Logout
+          </button>
+        </div>
+      </nav>
+
+      <div className="container">
+        {message.text && (
+          <div className={`alert ${message.type === 'error' ? 'alert-error' : 'alert-success'}`}>
+            {message.text}
+          </div>
+        )}
+
+        {/* Sale Receipt Display */}
+        {lastSale && (
+          <div className="card" style={{ marginBottom: '20px', backgroundColor: '#f8f9fa' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
+              <h3 style={{ margin: 0 }}>Last Sale Receipt</h3>
+              <button 
+                className="btn btn-secondary" 
+                onClick={() => setLastSale(null)}
+                style={{ fontSize: '12px', padding: '5px 10px' }}
+              >
+                Close
+              </button>
+            </div>
+            <table className="table" style={{ marginBottom: '15px' }}>
+              <thead>
+                <tr>
+                  <th>Date/Time</th>
+                  <th>Sold By</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{lastSale.date}</td>
+                  <td>{lastSale.soldBy}</td>
+                </tr>
+              </tbody>
+            </table>
+            <table className="table" style={{ marginBottom: '15px' }}>
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Qty</th>
+                  <th>Price</th>
+                  <th>Subtotal</th>
+                </tr>
+              </thead>
+              <tbody>
+                {lastSale.items.map((item, index) => (
+                  <tr key={index}>
+                    <td>{item.productName}</td>
+                    <td>{item.quantity}</td>
+                    <td>₹{item.price.toFixed(2)}</td>
+                    <td>₹{item.subtotal.toFixed(2)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <div style={{ padding: '10px', backgroundColor: '#e9ecef', borderRadius: '4px', textAlign: 'right' }}>
+              <strong>Total Amount: ₹{lastSale.totalAmount.toFixed(2)}</strong>
+            </div>
+          </div>
+        )}
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+          {/* Product Selection */}
+          <div className="card">
+            <h2 style={{ marginBottom: '15px' }}>Products</h2>
+            
+            <div className="form-group">
+              <input
+                type="text"
+                placeholder="Search by name or SKU..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                style={{ marginBottom: '15px' }}
+              />
+            </div>
+
+            <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>SKU</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredProducts.map(product => (
+                    <tr key={product._id}>
+                      <td>{product.name}</td>
+                      <td>{product.sku}</td>
+                      <td>₹{product.price.toFixed(2)}</td>
+                      <td>{product.stock}</td>
+                      <td>
+                        <button
+                          className="btn btn-primary"
+                          onClick={() => addToCart(product)}
+                          disabled={product.stock === 0}
+                          style={{ fontSize: '12px', padding: '5px 10px' }}
+                        >
+                          Add
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Cart */}
+          <div className="card">
+            <h2 style={{ marginBottom: '15px' }}>Cart</h2>
+            
+            {cart.length === 0 ? (
+              <p style={{ color: '#666', textAlign: 'center', padding: '20px' }}>
+                Cart is empty
+              </p>
+            ) : (
+              <>
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th>Product</th>
+                      <th>Price</th>
+                      <th>Qty</th>
+                      <th>Subtotal</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {cart.map(item => (
+                      <tr key={item.productId}>
+                        <td>{item.productName}</td>
+                        <td>₹{item.price.toFixed(2)}</td>
+                        <td>
+                          <input
+                            type="number"
+                            min="1"
+                            max={item.stock}
+                            value={item.quantity}
+                            onChange={(e) => updateQuantity(item.productId, parseInt(e.target.value))}
+                            style={{ width: '60px', padding: '5px' }}
+                          />
+                        </td>
+                        <td>₹{(item.price * item.quantity).toFixed(2)}</td>
+                        <td>
+                          <button
+                            className="btn btn-danger"
+                            onClick={() => removeFromCart(item.productId)}
+                            style={{ fontSize: '12px', padding: '5px 10px' }}
+                          >
+                            Remove
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+
+                <div style={{ marginTop: '20px', padding: '15px', backgroundColor: '#f8f9fa', borderRadius: '4px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '18px', fontWeight: 'bold' }}>
+                    <span>Total:</span>
+                    <span>₹{calculateTotal().toFixed(2)}</span>
+                  </div>
+                </div>
+
+                <button
+                  className="btn btn-success"
+                  onClick={handleCheckout}
+                  disabled={loading || cart.length === 0}
+                  style={{ width: '100%', marginTop: '15px', padding: '12px' }}
+                >
+                  {loading ? 'Processing...' : 'Complete Sale'}
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default EmployeePOS;
+
