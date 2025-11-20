@@ -135,6 +135,147 @@ const EmployeePOS = () => {
     window.location.href = '/login';
   };
 
+  const handlePrintReceipt = () => {
+    if (!lastSale) return;
+
+    const printWindow = window.open('', '_blank');
+    const printContent = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Sale Receipt</title>
+          <style>
+            * {
+              margin: 0;
+              padding: 0;
+              box-sizing: border-box;
+            }
+            body {
+              font-family: Arial, sans-serif;
+              padding: 20px;
+              color: #333;
+            }
+            .receipt-header {
+              text-align: center;
+              margin-bottom: 30px;
+              border-bottom: 2px solid #333;
+              padding-bottom: 20px;
+            }
+            .receipt-header h1 {
+              font-size: 28px;
+              margin-bottom: 10px;
+              color: #2c3e50;
+            }
+            .receipt-info {
+              margin-bottom: 25px;
+            }
+            .receipt-info p {
+              margin: 8px 0;
+              font-size: 14px;
+            }
+            .receipt-info strong {
+              display: inline-block;
+              width: 120px;
+            }
+            table {
+              width: 100%;
+              border-collapse: collapse;
+              margin-bottom: 25px;
+            }
+            th, td {
+              padding: 12px;
+              text-align: left;
+              border-bottom: 1px solid #ddd;
+            }
+            th {
+              background-color: #2c3e50;
+              color: white;
+              font-weight: bold;
+            }
+            tr:nth-child(even) {
+              background-color: #f9f9f9;
+            }
+            .total-section {
+              margin-top: 20px;
+              padding: 15px;
+              background-color: #f8f9fa;
+              border-radius: 5px;
+              text-align: right;
+            }
+            .total-section strong {
+              font-size: 20px;
+              color: #2c3e50;
+            }
+            .footer {
+              margin-top: 30px;
+              text-align: center;
+              font-size: 12px;
+              color: #666;
+              border-top: 1px solid #ddd;
+              padding-top: 15px;
+            }
+            @media print {
+              body {
+                padding: 10px;
+              }
+              .no-print {
+                display: none;
+              }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="receipt-header">
+            <h1>Sale Receipt</h1>
+          </div>
+          
+          <div class="receipt-info">
+            <p><strong>Date/Time:</strong> ${lastSale.date}</p>
+            <p><strong>Sold By:</strong> ${lastSale.soldBy}</p>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+                <th>Subtotal</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${lastSale.items.map(item => `
+                <tr>
+                  <td>${item.productName}</td>
+                  <td>${item.quantity}</td>
+                  <td>₹${item.price.toFixed(2)}</td>
+                  <td>₹${item.subtotal.toFixed(2)}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+
+          <div class="total-section">
+            <strong>Total Amount: ₹${lastSale.totalAmount.toFixed(2)}</strong>
+          </div>
+
+          <div class="footer">
+            <p>Thank you for your business!</p>
+            <p>Generated on ${new Date().toLocaleString()}</p>
+          </div>
+        </body>
+      </html>
+    `;
+
+    printWindow.document.write(printContent);
+    printWindow.document.close();
+    
+    // Wait for content to load, then print
+    setTimeout(() => {
+      printWindow.print();
+    }, 250);
+  };
+
   return (
     <div className="app">
       <nav className="navbar">
@@ -159,13 +300,22 @@ const EmployeePOS = () => {
           <div className="card" style={{ marginBottom: '20px', backgroundColor: '#f8f9fa' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
               <h3 style={{ margin: 0 }}>Last Sale Receipt</h3>
-              <button 
-                className="btn btn-secondary" 
-                onClick={() => setLastSale(null)}
-                style={{ fontSize: '12px', padding: '5px 10px' }}
-              >
-                Close
-              </button>
+              <div style={{ display: 'flex', gap: '10px' }}>
+                <button 
+                  className="btn btn-primary" 
+                  onClick={handlePrintReceipt}
+                  style={{ fontSize: '12px', padding: '5px 10px' }}
+                >
+                  Print Receipt
+                </button>
+                <button 
+                  className="btn btn-secondary" 
+                  onClick={() => setLastSale(null)}
+                  style={{ fontSize: '12px', padding: '5px 10px' }}
+                >
+                  Close
+                </button>
+              </div>
             </div>
             <table className="table" style={{ marginBottom: '15px' }}>
               <thead>

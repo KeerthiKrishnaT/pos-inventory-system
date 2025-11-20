@@ -460,8 +460,8 @@
   min-height: 100vh;
   padding: 60px;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-start;
+  justify-content: flex-start;
   background: radial-gradient(circle at top, rgba(255, 255, 255, 0.15), transparent 55%), #050a24;
   color: #fff;
   position: relative;
@@ -469,12 +469,12 @@
 }
 
 .landing-wrapper {
-  max-width: 1200px;
+  max-width: 1400px;
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 40px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: start;
   z-index: 1;
 }
 
@@ -487,10 +487,17 @@
   animation: gridFloat 16s linear infinite;
 }
 
+@media (max-width: 767px) {
+  .landing-overlay {
+    background-size: 80px 80px;
+  }
+}
+
 .landing-content {
-  max-width: 720px;
-  text-align: center;
+  max-width: 600px;
+  text-align: left;
   z-index: 1;
+  padding-top: 60px;
 }
 
 .landing-content h1 {
@@ -510,7 +517,7 @@
   letter-spacing: 3px;
   font-size: 12px;
   color: #8fb4ff;
-  margin-bottom: 0;
+  margin-bottom: 24px;
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -552,7 +559,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 20px 0;
+  margin: -40px auto 0;
 }
 
 .leaf-orbit {
@@ -570,7 +577,9 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  --orb-offset-x: 100px;
+  --orb-offset-y: 60px;
+  transform: translate(calc(-50% + var(--orb-offset-x)), calc(-50% + var(--orb-offset-y)));
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
   display: flex;
   flex-direction: column;
@@ -593,7 +602,8 @@
   left: 50%;
   width: 170px;
   text-align: center;
-  transform: rotate(var(--angle)) translate(0, -190px);
+  --leaf-distance: -190px;
+  transform: rotate(var(--angle)) translate(0, var(--leaf-distance));
   transform-origin: center;
   opacity: 0;
   animation: leafFly 1.6s cubic-bezier(0.4, 0.15, 0.2, 1) forwards;
@@ -637,10 +647,10 @@
 @keyframes orbPulse {
   0%,
   100% {
-    transform: translate(-50%, -50%) scale(1);
+    transform: translate(calc(-50% + var(--orb-offset-x)), calc(-50% + var(--orb-offset-y))) scale(1);
   }
   50% {
-    transform: translate(-50%, -50%) scale(1.05);
+    transform: translate(calc(-50% + var(--orb-offset-x)), calc(-50% + var(--orb-offset-y))) scale(1.05);
   }
 }
 
@@ -653,37 +663,370 @@
     opacity: 1;
   }
   100% {
-    transform: rotate(var(--angle)) translate(0, -190px) scale(1);
+    transform: rotate(var(--angle)) translate(0, var(--leaf-distance)) scale(1);
     opacity: 1;
   }
 }
 
-@media (max-width: 1024px) {
+/* Large Desktop (1440px and above) */
+@media (min-width: 1440px) {
   .landing-page {
-    padding: 40px 24px 80px;
+    padding: 80px 100px;
   }
 
   .landing-wrapper {
-    gap: 30px;
+    max-width: 1600px;
+    gap: 80px;
+  }
+
+  .landing-content {
+    max-width: 700px;
+    padding-top: 80px;
+  }
+
+  .landing-content h1 {
+    font-size: 64px;
+    margin-bottom: 24px;
+  }
+
+  .landing-content .subtitle {
+    font-size: 20px;
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    font-size: 13px;
+    margin-bottom: 28px;
   }
 
   .landing-visual {
-    width: 340px;
-    height: 340px;
+    width: 560px;
+    height: 560px;
+    margin: -50px auto 0;
   }
 
   .leaf-orbit {
-    width: 300px;
-    height: 300px;
+    width: 480px;
+    height: 480px;
+  }
+
+  .center-orb {
+    width: 200px;
+    height: 200px;
+  }
+
+  .center-orb span:nth-child(2) {
+    font-size: 32px;
+  }
+
+  .leaf {
+    width: 200px;
+    --leaf-distance: -240px;
+    transform: rotate(var(--angle)) translate(0, var(--leaf-distance));
+  }
+
+  .leaf-shape {
+    width: 90px;
+    height: 90px;
+  }
+
+  .leaf p {
+    font-size: 15px;
+  }
+
+  .landing-actions .btn {
+    min-width: 160px;
+    font-size: 16px;
+    padding: 14px 28px;
+  }
+}
+
+/* Desktop (1024px - 1439px) - Base styles already defined */
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .landing-page {
+    padding: 60px 80px;
+  }
+
+  .landing-wrapper {
+    gap: 60px;
+  }
+
+  .landing-content {
+    padding-top: 60px;
+  }
+}
+
+/* Tablet (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .landing-page {
+    padding: 40px 30px 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .landing-wrapper {
+    grid-template-columns: 1fr;
+    gap: 45px;
+    align-items: center;
+    text-align: center;
+    max-width: 600px;
+  }
+
+  .landing-content {
+    text-align: center;
+    max-width: 100%;
+    padding-top: 0;
+    margin: 0 auto;
+  }
+
+  .landing-content h1 {
+    font-size: 42px;
+    margin-bottom: 20px;
+    line-height: 1.2;
+  }
+
+  .landing-content .subtitle {
+    font-size: 17px;
+    margin-bottom: 32px;
+    line-height: 1.6;
+    padding: 0 10px;
+  }
+
+  .eyebrow {
+    font-size: 11px;
+    margin-bottom: 24px;
+  }
+
+  .landing-visual {
+    width: 400px;
+    height: 400px;
+    margin: -30px auto 0;
+  }
+
+  .leaf-orbit {
+    width: 340px;
+    height: 340px;
+    margin-left: -100px;
+  }
+
+  .center-orb {
+    width: 140px;
+    height: 140px;
+    --orb-offset-x: 70px;
+    --orb-offset-y: 50px;
+  }
+
+  .center-orb span:nth-child(2) {
+    font-size: 24px;
+  }
+
+  .leaf {
+    width: 150px;
+    --leaf-distance: -170px;
+    transform: rotate(var(--angle)) translate(0, var(--leaf-distance));
+  }
+
+  .leaf-shape {
+    width: 65px;
+    height: 65px;
+  }
+
+  .leaf p {
+    font-size: 12px;
   }
 
   .landing-actions {
     justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .landing-actions .btn {
+    min-width: 140px;
+    font-size: 15px;
+    padding: 12px 24px;
+  }
+}
+
+/* Mobile (below 768px) */
+@media (max-width: 767px) {
+  .landing-page {
+    padding: 25px 16px 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .landing-wrapper {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    align-items: center;
+    text-align: center;
+    max-width: 100%;
+  }
+
+  .landing-content {
+    text-align: center;
+    max-width: 100%;
+    padding-top: 0;
+    margin: 0 auto;
+  }
+
+  .landing-content h1 {
+    font-size: 32px;
+    margin-bottom: 18px;
+    line-height: 1.2;
+    padding: 0 10px;
+  }
+
+  .landing-content .subtitle {
+    font-size: 15px;
+    margin-bottom: 28px;
+    line-height: 1.6;
+    padding: 0 8px;
+  }
+
+  .eyebrow {
+    font-size: 10px;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+  }
+
+  .eyebrow::before,
+  .eyebrow::after {
+    width: 18px;
+    height: 1.5px;
+  }
+
+  .landing-visual {
+    width: 280px;
+    height: 280px;
+    margin: 0 auto;
+  }
+
+  .leaf-orbit {
+    width: 240px;
+    height: 240px;
+    margin: 0 auto 0 -20px;
   }
 
   .center-orb {
-    --orb-offset-x: 0px;
-    --orb-offset-y: 0px;
+    width: 110px;
+    height: 110px;
+    --orb-offset-x: 40px;
+    --orb-offset-y: 30px;
+  }
+
+  .center-orb span {
+    font-size: 10px;
+  }
+
+  .center-orb span:nth-child(2) {
+    font-size: 18px;
+  }
+
+  .leaf {
+    width: 120px;
+    --leaf-distance: -130px;
+    transform: rotate(var(--angle)) translate(0, var(--leaf-distance));
+  }
+
+  .leaf-shape {
+    width: 50px;
+    height: 50px;
+    margin: 0 auto 8px;
+  }
+
+  .leaf p {
+    font-size: 10px;
+  }
+
+  .landing-actions {
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+
+  .landing-actions .btn {
+    min-width: 100%;
+    font-size: 14px;
+    padding: 12px 24px;
+  }
+}
+
+/* Small Mobile (below 480px) */
+@media (max-width: 479px) {
+  .landing-page {
+    padding: 20px 12px 40px;
+  }
+
+  .landing-wrapper {
+    gap: 25px;
+  }
+
+  .landing-content h1 {
+    font-size: 28px;
+    margin-bottom: 16px;
+    padding: 0 8px;
+  }
+
+  .landing-content .subtitle {
+    font-size: 14px;
+    margin-bottom: 24px;
+    padding: 0 6px;
+  }
+
+  .eyebrow {
+    font-size: 9px;
+    margin-bottom: 16px;
+  }
+
+  .landing-visual {
+    width: 240px;
+    height: 240px;
+  }
+
+  .leaf-orbit {
+    width: 200px;
+    height: 200px;
+    margin-left: -15px;
+  }
+
+  .center-orb {
+    width: 90px;
+    height: 90px;
+    --orb-offset-x: 50px;
+    --orb-offset-y: 30px;
+  }
+
+  .center-orb span {
+    font-size: 9px;
+  }
+
+  .center-orb span:nth-child(2) {
+    font-size: 16px;
+  }
+
+  .leaf {
+    width: 100px;
+    --leaf-distance: -110px;
+    transform: rotate(var(--angle)) translate(0, var(--leaf-distance));
+  }
+
+  .leaf-shape {
+    width: 42px;
+    height: 42px;
+  }
+
+  .leaf p {
+    font-size: 9px;
+  }
+
+  .landing-actions {
+    max-width: 100%;
   }
 }
 

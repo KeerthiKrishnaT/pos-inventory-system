@@ -42,7 +42,22 @@ const Landing = () => {
     <div className="landing-page">
       <div className="landing-overlay" />
       <div className="landing-wrapper">
-        <p className="eyebrow">Billing Web · POS & Inventory</p>
+        <div className="landing-content">
+          <p className="eyebrow">Billing Web · POS & Inventory</p>
+          <h1>Smart Billing for Agile Businesses</h1>
+          <p className="subtitle">
+            Automate invoicing, keep inventory in sync, and convert every sale into actionable insights.
+            Your team gets speed, your customers get clarity.
+          </p>
+          <div className="landing-actions">
+            <button className="btn btn-primary" onClick={() => navigate('/login')}>
+              Go to Login
+            </button>
+            <button className="btn btn-secondary" onClick={() => navigate('/register')}>
+              Create Account
+            </button>
+          </div>
+        </div>
         
         <div className="landing-visual">
           <div className="leaf-orbit">
@@ -66,22 +81,6 @@ const Landing = () => {
                 <p>{leaf.title}</p>
               </div>
             ))}
-          </div>
-        </div>
-
-        <div className="landing-content">
-          <h1>Smart Billing for Agile Businesses</h1>
-          <p className="subtitle">
-            Automate invoicing, keep inventory in sync, and convert every sale into actionable insights.
-            Your team gets speed, your customers get clarity.
-          </p>
-          <div className="landing-actions">
-            <button className="btn btn-primary" onClick={() => navigate('/login')}>
-              Go to Login
-            </button>
-            <button className="btn btn-secondary" onClick={() => navigate('/register')}>
-              Create Account
-            </button>
           </div>
         </div>
       </div>
