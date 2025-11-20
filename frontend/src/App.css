@@ -1111,9 +1111,19 @@
     font-size: 12px;
   }
 
+  .pos-products-table-wrapper .table {
+    border-spacing: 0;
+    border-collapse: collapse;
+  }
+
   .pos-products-table-wrapper .table th,
   .pos-products-table-wrapper .table td {
-    padding: 8px 6px;
+    padding: 6px 4px;
+  }
+
+  .pos-products-table-wrapper .table tbody tr {
+    margin: 0;
+    border-spacing: 0;
   }
 
   /* Reduce gap for Price, Stock, and Action columns */

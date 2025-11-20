@@ -443,7 +443,7 @@ const EmployeePOS = () => {
                           <button
                             className="btn btn-danger remove-btn"
                             onClick={() => removeFromCart(item.productId)}
-                            style={{ fontSize: '12px', padding: '5px 10px' }}
+                            style={{ fontSize: '12px', padding: '5px 5px' }}
                             aria-label="Remove item"
                           >
                             <span className="remove-text">Remove</span>
