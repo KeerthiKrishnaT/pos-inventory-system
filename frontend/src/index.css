@@ -113,7 +113,8 @@ code {
   
   .table th,
   .table td {
-    padding: 8px 6px;
+    padding: 6px 4px;
+    font-size: 11px;
   }
   
   .table th {
@@ -133,7 +134,7 @@ code {
 
 .table th,
 .table td {
-  padding: 12px;
+  padding: 10px;
   text-align: left;
   border-bottom: 1px solid #ddd;
 }

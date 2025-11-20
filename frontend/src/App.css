@@ -1118,7 +1118,7 @@
 
   .pos-products-table-wrapper .table th,
   .pos-products-table-wrapper .table td {
-    padding: 6px 4px;
+    padding: 5px 3px;
   }
 
   .pos-products-table-wrapper .table tbody tr {
@@ -1155,7 +1155,7 @@
 
   .pos-cart-table-wrapper .table th,
   .pos-cart-table-wrapper .table td {
-    padding: 8px 5px;
+    padding: 5px 3px;
     white-space: nowrap;
   }
 
@@ -1233,7 +1233,7 @@
 
   .pos-products-table-wrapper .table th,
   .pos-products-table-wrapper .table td {
-    padding: 10px 8px;
+    padding: 8px 6px;
   }
 
   /* Reduce gap for Price, Stock, and Action columns - Tablet */
@@ -1265,7 +1265,7 @@
 
   .pos-cart-table-wrapper .table th,
   .pos-cart-table-wrapper .table td {
-    padding: 8px 5px;
+    padding: 7px 5px;
     white-space: normal;
     word-wrap: break-word;
   }
