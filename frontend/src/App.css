@@ -1037,6 +1037,13 @@
   gap: 20px;
 }
 
+/* POS Tables Responsive */
+.pos-products-table-wrapper,
+.pos-cart-table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 @media (max-width: 768px) {
   .pos-grid {
     grid-template-columns: 1fr;
@@ -1045,6 +1052,59 @@
   
   .pos-grid .card {
     width: 100%;
+  }
+
+  /* Products Table - Horizontal Scroll */
+  .pos-products-table-wrapper {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  .pos-products-table-wrapper .table {
+    min-width: 600px;
+    font-size: 12px;
+  }
+
+  .pos-products-table-wrapper .table th,
+  .pos-products-table-wrapper .table td {
+    padding: 8px 6px;
+  }
+
+  .pos-products-table-wrapper .table th {
+    font-size: 11px;
+  }
+
+  /* Cart Table - Reduced Width with Scroll */
+  .pos-cart-table-wrapper {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  .pos-cart-table-wrapper .table {
+    min-width: 500px;
+    font-size: 12px;
+    width: 100%;
+  }
+
+  .pos-cart-table-wrapper .table th,
+  .pos-cart-table-wrapper .table td {
+    padding: 8px 5px;
+    white-space: nowrap;
+  }
+
+  .pos-cart-table-wrapper .table th {
+    font-size: 11px;
+  }
+
+  .pos-cart-table-wrapper .table td input[type="number"] {
+    width: 50px;
+    padding: 4px;
+    font-size: 12px;
+  }
+
+  .pos-cart-table-wrapper .table .btn {
+    font-size: 10px;
+    padding: 4px 8px;
   }
 }
 

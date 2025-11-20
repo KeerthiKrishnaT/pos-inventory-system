@@ -368,7 +368,7 @@ const EmployeePOS = () => {
               />
             </div>
 
-            <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
+            <div className="pos-products-table-wrapper" style={{ maxHeight: '500px', overflowY: 'auto' }}>
               <table className="table">
                 <thead>
                   <tr>
@@ -412,7 +412,8 @@ const EmployeePOS = () => {
               </p>
             ) : (
               <>
-                <table className="table">
+                <div className="pos-cart-table-wrapper">
+                  <table className="table">
                   <thead>
                     <tr>
                       <th>Product</th>
@@ -451,6 +452,7 @@ const EmployeePOS = () => {
                     ))}
                   </tbody>
                 </table>
+                </div>
 
                 <div style={{ marginTop: '20px', padding: '15px', backgroundColor: '#f8f9fa', borderRadius: '4px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '18px', fontWeight: 'bold' }}>
