@@ -1048,10 +1048,24 @@
   .pos-grid {
     grid-template-columns: 1fr;
     gap: 15px;
+    width: 100%;
+    max-width: 100%;
   }
   
   .pos-grid .card {
     width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  
+  /* Ensure container doesn't add extra width */
+  .container {
+    padding: 15px 10px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   /* Products Table - Horizontal Scroll */
@@ -1061,7 +1075,7 @@
   }
 
   .pos-products-table-wrapper .table {
-    min-width: 600px;
+    min-width: 450px;
     font-size: 12px;
   }
 
@@ -1081,7 +1095,7 @@
   }
 
   .pos-cart-table-wrapper .table {
-    min-width: 500px;
+    min-width: 400px;
     font-size: 12px;
     width: 100%;
   }
@@ -1105,6 +1119,73 @@
   .pos-cart-table-wrapper .table .btn {
     font-size: 10px;
     padding: 4px 8px;
+  }
+}
+
+/* Tablet View (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .pos-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+  }
+
+  .pos-grid .card {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  /* Products Table - Tablet */
+  .pos-products-table-wrapper {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  .pos-products-table-wrapper .table {
+    width: 100%;
+    min-width: auto;
+    font-size: 13px;
+  }
+
+  .pos-products-table-wrapper .table th,
+  .pos-products-table-wrapper .table td {
+    padding: 10px 8px;
+  }
+
+  /* Cart Table - Tablet - Fix width to match card */
+  .pos-cart-table-wrapper {
+    max-width: 100%;
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .pos-cart-table-wrapper .table {
+    width: 100%;
+    min-width: auto;
+    max-width: 100%;
+    font-size: 13px;
+    table-layout: auto;
+  }
+
+  .pos-cart-table-wrapper .table th,
+  .pos-cart-table-wrapper .table td {
+    padding: 10px 6px;
+    white-space: normal;
+    word-wrap: break-word;
+  }
+
+  .pos-cart-table-wrapper .table th {
+    font-size: 12px;
+  }
+
+  .pos-cart-table-wrapper .table td input[type="number"] {
+    width: 55px;
+    padding: 5px;
+    font-size: 13px;
+  }
+
+  .pos-cart-table-wrapper .table .btn {
+    font-size: 11px;
+    padding: 5px 10px;
   }
 }
 

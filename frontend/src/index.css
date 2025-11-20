@@ -96,11 +96,39 @@ code {
 
 .table {
   width: 100%;
+  max-width: 100%;
   border-collapse: collapse;
   background: white;
   border-radius: 4px;
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+@media (max-width: 768px) {
+  .table {
+    width: 100%;
+    max-width: 100%;
+    font-size: 12px;
+  }
+  
+  .table th,
+  .table td {
+    padding: 8px 6px;
+  }
+  
+  .table th {
+    font-size: 11px;
+  }
+  
+  .card {
+    padding: 15px;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  
+  .container {
+    padding: 15px 10px;
+  }
 }
 
 .table th,
@@ -126,6 +154,9 @@ code {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(10px);
   margin-bottom: 20px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
 }
 
 .alert {
