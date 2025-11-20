@@ -447,7 +447,17 @@ const EmployeePOS = () => {
                             aria-label="Remove item"
                           >
                             <span className="remove-text">Remove</span>
-                            <span className="remove-icon"><i className="fa-solid fa-trash"></i></span>
+                            <span className="remove-icon" aria-hidden="true">
+                              <svg
+                                width="16"
+                                height="16"
+                                viewBox="0 0 448 512"
+                                fill="currentColor"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path d="M135.2 17.7C140.6 7.4 150.8 0 162.5 0h123.1c11.7 0 21.9 7.4 27.3 17.7L328 32H432c8.8 0 16 7.2 16 16s-7.2 16-16 16H16C7.2 64 0 56.8 0 48s7.2-16 16-16H120l15.2-14.3zM32 96H416l-21.2 369.9c-1.8 31.7-28 56.1-59.8 56.1H113.1c-31.8 0-58-24.4-59.8-56.1L32 96zm112 80c-8.8 0-16 7.2-16 16v224c0 8.8 7.2 16 16 16s16-7.2 16-16V192c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16v224c0 8.8 7.2 16 16 16s16-7.2 16-16V192c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16v224c0 8.8 7.2 16 16 16s16-7.2 16-16V192c0-8.8-7.2-16-16-16z"/>
+                              </svg>
+                            </span>
                           </button>
                         </td>
                       </tr>
