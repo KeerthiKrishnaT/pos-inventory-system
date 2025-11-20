@@ -345,11 +345,24 @@ const ProductManagement = () => {
       )}
 
       {showModal && (
-        <div className="modal" onClick={handleCloseModal}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <div 
+          className="modal" 
+          onClick={handleCloseModal}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="modal-title"
+          aria-describedby="modal-description"
+        >
+          <div className="modal-content" onClick={(e) => e.stopPropagation()} id="modal-description">
             <div className="modal-header">
-              <h3>{editingProduct ? 'Edit Product' : 'Add New Product'}</h3>
-              <button className="close-btn" onClick={handleCloseModal}>×</button>
+              <h3 id="modal-title">{editingProduct ? 'Edit Product' : 'Add New Product'}</h3>
+              <button 
+                className="close-btn" 
+                onClick={handleCloseModal}
+                aria-label="Close modal"
+              >
+                ×
+              </button>
             </div>
 
             {message.text && (

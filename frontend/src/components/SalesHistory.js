@@ -451,11 +451,24 @@ const SalesHistory = () => {
       )}
 
       {selectedSale && (
-        <div className="modal" onClick={() => setSelectedSale(null)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <div 
+          className="modal" 
+          onClick={() => setSelectedSale(null)}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="sale-details-title"
+          aria-describedby="sale-details-description"
+        >
+          <div className="modal-content" onClick={(e) => e.stopPropagation()} id="sale-details-description">
             <div className="modal-header">
-              <h3>Sale Details</h3>
-              <button className="close-btn" onClick={() => setSelectedSale(null)}>×</button>
+              <h3 id="sale-details-title">Sale Details</h3>
+              <button 
+                className="close-btn" 
+                onClick={() => setSelectedSale(null)}
+                aria-label="Close modal"
+              >
+                ×
+              </button>
             </div>
 
             <div style={{ marginBottom: '15px' }}>
