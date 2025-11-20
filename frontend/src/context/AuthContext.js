@@ -11,11 +11,26 @@ export const useAuth = () => {
   return context;
 };
 
+const getDefaultApiUrl = () => {
+  if (process.env.REACT_APP_API_URL) {
+    return process.env.REACT_APP_API_URL;
+  }
+
+  if (typeof window !== 'undefined') {
+    const origin = window.location.origin || '';
+    if (origin.includes('vercel.app')) {
+      return 'https://pos-inventory-system.onrender.com/api';
+    }
+  }
+
+  return 'http://localhost:5000/api';
+};
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+  const API_URL = getDefaultApiUrl();
 
   useEffect(() => {
     const token = localStorage.getItem('token');

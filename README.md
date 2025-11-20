@@ -45,8 +45,6 @@ A simplified Point-of-Sale and Inventory Management application built with the M
   - **Cloud**: Use MongoDB Atlas (free tier available) from [mongodb.com/cloud/atlas](https://www.mongodb.com/cloud/atlas)
 - npm or yarn
 
-> 📖 **See [MONGODB_SETUP.md](./MONGODB_SETUP.md) for detailed MongoDB installation and configuration instructions.**
-
 ### Backend Setup
 
 1. Navigate to the backend directory:
@@ -101,6 +99,19 @@ npm start
 ```
 
 The frontend will run on `http://localhost:3000`
+
+### Production Environment Variables
+
+When deploying, configure these values so the live app calls the correct services:
+
+- **Frontend (Vercel)**
+  - `REACT_APP_API_URL=https://pos-inventory-system.onrender.com/api`
+
+- **Backend (Render)**
+  - `FRONTEND_URL=https://pos-inventory-system-six.vercel.app`
+  - `MONGODB_URI`, `JWT_SECRET`, etc. as described above
+
+After updating the variables, trigger a redeploy on Vercel/Render so the new values take effect.
 
 ## Initial User Setup
 
