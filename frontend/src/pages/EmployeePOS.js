@@ -354,7 +354,7 @@ const EmployeePOS = () => {
           </div>
         )}
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+        <div className="pos-grid">
           <div className="card">
             <h2 style={{ marginBottom: '15px' }}>Products</h2>
             
