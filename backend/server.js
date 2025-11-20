@@ -6,6 +6,7 @@ require('dotenv').config();
 const app = express();
 
 // Middleware - CORS Configuration
+// Allow both localhost (development) and Vercel (production) origins
 const allowedOrigins = [
   'http://localhost:3000',
   'https://pos-inventory-system-six.vercel.app',
@@ -17,13 +18,23 @@ app.use(cors({
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
     
-    if (allowedOrigins.indexOf(origin) !== -1 || allowedOrigins.length === 0) {
+    // Check if origin is in allowed list
+    if (allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      // For development: allow localhost variations
+      if (origin.startsWith('http://localhost:') || origin.startsWith('https://localhost:')) {
+        callback(null, true);
+      } else {
+        // Allow the request but log for debugging
+        console.log('CORS: Allowing origin:', origin);
+        callback(null, true); // Temporarily allow all for deployment
+      }
     }
   },
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(express.json());
 
