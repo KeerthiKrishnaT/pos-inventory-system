@@ -46,7 +46,7 @@ const SalesChart = () => {
 
     const products = Object.values(productMap)
       .sort((a, b) => b.revenue - a.revenue)
-      .slice(0, 6); // Top 6 products
+      .slice(0, 6);
 
     setProductSales(products);
   };
@@ -59,7 +59,7 @@ const SalesChart = () => {
   const totalRevenue = productSales.reduce((sum, p) => sum + p.revenue, 0);
 
   const calculatePieData = () => {
-    let currentAngle = -90; // Start from top
+    let currentAngle = -90;
     const segments = [];
 
     productSales.forEach((product, index) => {

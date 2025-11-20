@@ -105,7 +105,6 @@ const EmployeePOS = () => {
       const response = await axios.post(`${API_URL}/sales`, { items });
       const saleData = response.data;
       
-      // Store last sale for receipt display
       setLastSale({
         date: new Date(saleData.createdAt).toLocaleString(),
         items: saleData.items,
@@ -115,7 +114,7 @@ const EmployeePOS = () => {
       
       setMessage({ type: 'success', text: 'Sale completed successfully!' });
       setCart([]);
-      fetchProducts(); // Refresh product list to update stock
+      fetchProducts();
       
       setTimeout(() => {
         setMessage({ type: '', text: '' });
@@ -270,7 +269,6 @@ const EmployeePOS = () => {
     printWindow.document.write(printContent);
     printWindow.document.close();
     
-    // Wait for content to load, then print
     setTimeout(() => {
       printWindow.print();
     }, 250);
@@ -295,7 +293,6 @@ const EmployeePOS = () => {
           </div>
         )}
 
-        {/* Sale Receipt Display */}
         {lastSale && (
           <div className="card" style={{ marginBottom: '20px', backgroundColor: '#f8f9fa' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
@@ -358,7 +355,6 @@ const EmployeePOS = () => {
         )}
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-          {/* Product Selection */}
           <div className="card">
             <h2 style={{ marginBottom: '15px' }}>Products</h2>
             
@@ -407,7 +403,6 @@ const EmployeePOS = () => {
             </div>
           </div>
 
-          {/* Cart */}
           <div className="card">
             <h2 style={{ marginBottom: '15px' }}>Cart</h2>
             

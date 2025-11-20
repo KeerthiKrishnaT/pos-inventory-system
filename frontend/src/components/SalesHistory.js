@@ -47,7 +47,6 @@ const SalesHistory = () => {
   const applyFilters = () => {
     let filtered = [...sales];
 
-    // Date range filter
     if (filters.dateFrom) {
       const fromDate = new Date(filters.dateFrom);
       filtered = filtered.filter(sale => new Date(sale.createdAt) >= fromDate);
@@ -58,14 +57,12 @@ const SalesHistory = () => {
       filtered = filtered.filter(sale => new Date(sale.createdAt) <= toDate);
     }
 
-    // Seller filter
     if (filters.seller) {
       filtered = filtered.filter(sale => 
         (sale.soldByName || sale.soldBy?.email || '').toLowerCase().includes(filters.seller.toLowerCase())
       );
     }
 
-    // Product filter
     if (filters.product) {
       filtered = filtered.filter(sale =>
         sale.items.some(item => 
@@ -74,7 +71,6 @@ const SalesHistory = () => {
       );
     }
 
-    // Amount range filter
     if (filters.minAmount) {
       filtered = filtered.filter(sale => sale.totalAmount >= parseFloat(filters.minAmount));
     }

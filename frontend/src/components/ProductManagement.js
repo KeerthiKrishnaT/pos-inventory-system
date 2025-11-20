@@ -27,6 +27,8 @@ const ProductManagement = () => {
     stockStatus: '' 
     
   });
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 15;
 
   useEffect(() => {
     fetchProducts();
@@ -34,6 +36,7 @@ const ProductManagement = () => {
 
   useEffect(() => {
     applyFilters();
+    setCurrentPage(1); // Reset to first page when filters change
   }, [products, filters]);
 
   const fetchProducts = async () => {
@@ -84,14 +87,12 @@ const ProductManagement = () => {
         setMessage({ type: 'success', text: 'Product created successfully' });
       }
       fetchProducts();
-      // Close modal after 1 second
       setTimeout(() => {
         handleCloseModal();
       }, 1000);
-      // Show success message for 20 seconds (even after modal closes)
       setTimeout(() => {
         setMessage({ type: '', text: '' });
-      }, 20000);
+      }, 10000);
     } catch (error) {
       setMessage({
         type: 'error',
@@ -103,7 +104,6 @@ const ProductManagement = () => {
   const applyFilters = () => {
     let filtered = [...products];
 
-    // Search filter (name or SKU)
     if (filters.search) {
       const searchLower = filters.search.toLowerCase();
       filtered = filtered.filter(product =>
@@ -112,7 +112,6 @@ const ProductManagement = () => {
       );
     }
 
-    // Price range filter
     if (filters.minPrice) {
       filtered = filtered.filter(product => product.price >= parseFloat(filters.minPrice));
     }
@@ -120,7 +119,6 @@ const ProductManagement = () => {
       filtered = filtered.filter(product => product.price <= parseFloat(filters.maxPrice));
     }
 
-    // Stock range filter
     if (filters.minStock) {
       filtered = filtered.filter(product => product.stock >= parseInt(filters.minStock));
     }
@@ -128,7 +126,6 @@ const ProductManagement = () => {
       filtered = filtered.filter(product => product.stock <= parseInt(filters.maxStock));
     }
 
-    // Stock status filter
     if (filters.stockStatus) {
       if (filters.stockStatus === 'out_of_stock') {
         filtered = filtered.filter(product => product.stock === 0);
@@ -178,6 +175,25 @@ const ProductManagement = () => {
   };
 
   const hasActiveFilters = Object.values(filters).some(val => val !== '');
+
+  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+  const startIndex = (currentPage - 1) * productsPerPage;
+  const endIndex = startIndex + productsPerPage;
+  const currentProducts = filteredProducts.slice(startIndex, endIndex);
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
 
   return (
     <div>
@@ -301,6 +317,11 @@ const ProductManagement = () => {
             <>
               <div style={{ marginBottom: '15px', color: '#666', fontSize: '14px' }}>
                 Showing {filteredProducts.length} of {products.length} products
+                {filteredProducts.length > productsPerPage && (
+                  <span style={{ marginLeft: '10px' }}>
+                    (Page {currentPage} of {totalPages})
+                  </span>
+                )}
               </div>
               <table className="table">
                 <thead>
@@ -313,7 +334,7 @@ const ProductManagement = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredProducts.map(product => (
+                  {currentProducts.map(product => (
                   <tr key={product._id}>
                     <td>{product.name}</td>
                     <td>{product.sku}</td>
@@ -339,6 +360,63 @@ const ProductManagement = () => {
                   ))}
                 </tbody>
               </table>
+              
+              {/* Pagination Controls */}
+              {filteredProducts.length > productsPerPage && (
+                <div style={{ 
+                  display: 'flex', 
+                  justifyContent: 'center', 
+                  alignItems: 'center', 
+                  gap: '20px', 
+                  marginTop: '20px',
+                  padding: '15px',
+                  borderTop: '1px solid #e0e0e0'
+                }}>
+                  <button
+                    className="btn btn-secondary"
+                    onClick={handlePreviousPage}
+                    disabled={currentPage === 1}
+                    style={{
+                      padding: '8px 16px',
+                      fontSize: '16px',
+                      cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
+                      opacity: currentPage === 1 ? 0.5 : 1,
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '5px'
+                    }}
+                  >
+                    ← Previous
+                  </button>
+                  
+                  <span style={{ 
+                    fontSize: '16px', 
+                    fontWeight: '600',
+                    color: '#333',
+                    minWidth: '100px',
+                    textAlign: 'center'
+                  }}>
+                    Page {currentPage} of {totalPages}
+                  </span>
+                  
+                  <button
+                    className="btn btn-secondary"
+                    onClick={handleNextPage}
+                    disabled={currentPage === totalPages}
+                    style={{
+                      padding: '8px 16px',
+                      fontSize: '16px',
+                      cursor: currentPage === totalPages ? 'not-allowed' : 'pointer',
+                      opacity: currentPage === totalPages ? 0.5 : 1,
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '5px'
+                    }}
+                  >
+                    Next →
+                  </button>
+                </div>
+              )}
             </>
           )}
         </div>
