@@ -1045,27 +1045,48 @@
 }
 
 @media (max-width: 768px) {
-  .pos-grid {
-    grid-template-columns: 1fr;
-    gap: 15px;
+  /* Prevent horizontal overflow on mobile */
+  body, html {
+    overflow-x: hidden;
     width: 100%;
     max-width: 100%;
   }
+
+  .app {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Fix container to prevent overflow */
+  .container {
+    padding: 10px 8px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 0 auto;
+    overflow-x: hidden;
+  }
+
+  .pos-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
   
   .pos-grid .card {
-    width: 100%;
+    width: calc(100% - 0px);
     max-width: 100%;
     box-sizing: border-box;
     margin-left: 0;
     margin-right: 0;
-  }
-  
-  /* Ensure container doesn't add extra width */
-  .container {
-    padding: 15px 10px;
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
+    margin-bottom: 12px;
+    padding: 12px;
+    overflow: hidden;
   }
 
   /* Products Table - Horizontal Scroll */
