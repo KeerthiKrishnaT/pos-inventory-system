@@ -461,12 +461,21 @@
   padding: 60px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   background: radial-gradient(circle at top, rgba(255, 255, 255, 0.15), transparent 55%), #050a24;
   color: #fff;
   position: relative;
   overflow: hidden;
+}
+
+.landing-wrapper {
+  max-width: 1200px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 40px;
+  z-index: 1;
 }
 
 .landing-overlay {
@@ -479,7 +488,8 @@
 }
 
 .landing-content {
-  max-width: 520px;
+  max-width: 720px;
+  text-align: center;
   z-index: 1;
 }
 
@@ -500,10 +510,11 @@
   letter-spacing: 3px;
   font-size: 12px;
   color: #8fb4ff;
-  margin-bottom: 18px;
+  margin-bottom: 0;
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  z-index: 1;
 }
 
 .eyebrow::before,
@@ -541,7 +552,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transform: translateX(-100px);
+  margin: 20px 0;
 }
 
 .leaf-orbit {
@@ -558,10 +569,8 @@
   background: conic-gradient(#ffb400, #ff5959, #17ead9, #6078ea, #ffb400);
   position: absolute;
   top: 50%;
-  left: 58%;
-  --orb-offset-x: 50px;
-  --orb-offset-y: 40px;
-  transform: translate(calc(-50% + var(--orb-offset-x)), calc(-50% + var(--orb-offset-y)));
+  left: 50%;
+  transform: translate(-50%, -50%);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
   display: flex;
   flex-direction: column;
@@ -628,10 +637,10 @@
 @keyframes orbPulse {
   0%,
   100% {
-    transform: translate(calc(-50% + var(--orb-offset-x)), calc(-50% + var(--orb-offset-y))) scale(1);
+    transform: translate(-50%, -50%) scale(1);
   }
   50% {
-    transform: translate(calc(-50% + var(--orb-offset-x)), calc(-50% + var(--orb-offset-y))) scale(1.05);
+    transform: translate(-50%, -50%) scale(1.05);
   }
 }
 
@@ -651,15 +660,16 @@
 
 @media (max-width: 1024px) {
   .landing-page {
-    flex-direction: column-reverse;
-    text-align: center;
     padding: 40px 24px 80px;
+  }
+
+  .landing-wrapper {
+    gap: 30px;
   }
 
   .landing-visual {
     width: 340px;
     height: 340px;
-    transform: none;
   }
 
   .leaf-orbit {
