@@ -441,11 +441,13 @@ const EmployeePOS = () => {
                         <td>₹{(item.price * item.quantity).toFixed(2)}</td>
                         <td>
                           <button
-                            className="btn btn-danger"
+                            className="btn btn-danger remove-btn"
                             onClick={() => removeFromCart(item.productId)}
                             style={{ fontSize: '12px', padding: '5px 10px' }}
+                            aria-label="Remove item"
                           >
-                            Remove
+                            <span className="remove-text">Remove</span>
+                            <span className="remove-icon"><i className="fa-solid fa-trash"></i></span>
                           </button>
                         </td>
                       </tr>
